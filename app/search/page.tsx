@@ -12,11 +12,11 @@ export default async function SearchUsername({
     user = await getGitHubUser(search);
   } catch (err: unknown) {
     if (err instanceof Error) {
-      return <div>Error: {err.message}</div>;
+      return <div className="text-2xl">Error: {err.message}</div>;
     } else {
       throw new Error("Unknown error occurred");
     }
   }
 
-  return <div className="text-4xl">Results for: {user.name}</div>;
+  return <div className="text-2xl">Results for: {user.login}</div>;
 }
