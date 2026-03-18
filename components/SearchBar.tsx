@@ -63,7 +63,7 @@ export default function SearchBar({
         }}
         placeholder="search a git username"
         style={{ height: height, paddingLeft: icon * 2 }}
-        className={`bg-white text-black pb-1 pr-4 rounded-full ${text} w-full outline-none focus:ring-2 focus:ring-green-900`}
+        className={`bg-white text-black pr-4 rounded-full ${text} w-full outline-none focus:ring-2 focus:ring-green-900`}
       />
     </form>
   );

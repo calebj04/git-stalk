@@ -21,7 +21,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Content */}
       <div className="h-full flex flex-col gap-6 items-center justify-center">
         <div className="h-full flex flex-col items-center justify-center">
-          {children}
+          <Suspense fallback={<div className="text-2xl">Loading...</div>}>
+            {children}
+          </Suspense>
         </div>
       </div>
       {/* Footer */}
