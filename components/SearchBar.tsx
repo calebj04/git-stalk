@@ -1,3 +1,8 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 export default function SearchBar({
   icon,
   text,
@@ -9,9 +14,25 @@ export default function SearchBar({
   height: number;
   width: number;
 }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("q") || "";
+  const [search, setSearch] = useState(initialSearch);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!search) return;
+    router.push(`/search?q=${encodeURIComponent(search)}`);
+  };
+
+  useEffect(() => {
+    setSearch(searchParams.get("q") || "");
+  }, [searchParams]);
+
   return (
     <form
       role="search"
+      onSubmit={handleSearch}
       style={{ maxWidth: width }}
       className="flex relative w-full p-1"
     >
@@ -36,6 +57,10 @@ export default function SearchBar({
       </svg>
       <input
         type="search"
+        value={search}
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
         placeholder="search a git username"
         style={{ height: height, paddingLeft: icon * 2 }}
         className={`bg-white text-black pb-1 pr-4 rounded-full ${text} w-full outline-none focus:ring-2 focus:ring-green-900`}

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Logo from "@/components/Logo";
 import Footer from "@/components/Footer";
 import SearchBar from "@/components/SearchBar";
@@ -11,7 +12,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
         <div className="w-full flex justify-center text-2xl">
-          <SearchBar icon={18} text="text-2xl" height={32} width={600} />
+          <Suspense fallback={<div>Loading search...</div>}>
+            <SearchBar icon={18} text="text-2xl" height={32} width={600} />
+          </Suspense>
         </div>
         <div>Avatar</div>
       </div>
