@@ -1,38 +1,46 @@
 import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import Link from "next/link";
 import Logo from "./../components/Logo";
 
-export default async function Home() {
+async function UserDetails() {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
 
   if (error) {
-    redirect("/auth/sign-in");
+    console.error("Auth error:", error);
   }
 
+  return (
+    <div>
+      {data && !error ? (
+        <div className="text-2xl">Hello, {data.user.email}</div>
+      ) : (
+        <div className="flex gap-6 items-center text-2xl ">
+          <Link href="/auth/sign-in" className="cursor-pointer">
+            Sign in
+          </Link>
+          <Link
+            href={"/auth/sign-up"}
+            className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
+          >
+            Sign up
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function Home() {
   return (
     <main className="h-screen w-screen flex flex-col p-6">
       {/* Header */}
       <div className="w-full flex justify-between">
-        <div>
-          <Logo className="w-16 h-10 cursor-pointer" />
-        </div>
-        {data ? (
-          <div className="text-2xl">Hello, {data.user.email}</div>
-        ) : (
-          <div className="flex gap-6 items-center text-2xl ">
-            <Link href="/auth/sign-in" className="cursor-pointer">
-              Sign in
-            </Link>
-            <Link
-              href={"/auth/sign-up"}
-              className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
-            >
-              Sign up
-            </Link>
-          </div>
-        )}
+        <Logo className="w-16 h-10 cursor-pointer" />
+        <Suspense fallback={<div className="text-2xl">Loading...</div>}>
+          <UserDetails />
+        </Suspense>
       </div>
       {/* Content */}
       <div className="h-full flex flex-col gap-6 items-center justify-center">
