@@ -5,7 +5,7 @@ import SearchBar from "@/components/SearchBar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="h-screen w-screen flex flex-col p-6">
+    <main className="min-h-screen w-screen flex flex-col p-6">
       {/* Header */}
       <div className="w-full flex justify-between">
         <div>
@@ -19,12 +19,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div>Avatar</div>
       </div>
       {/* Content */}
-      <div className="h-full flex flex-col gap-6 items-center justify-center">
-        <div className="h-full flex flex-col items-center justify-center">
-          <Suspense fallback={<div className="text-2xl">Loading...</div>}>
-            {children}
-          </Suspense>
-        </div>
+      <div className="h-full flex flex-1">
+        <Suspense fallback={<div className="text-2xl">Loading...</div>}>
+          {children}
+        </Suspense>
       </div>
       {/* Footer */}
       <Footer />

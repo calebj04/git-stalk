@@ -18,5 +18,10 @@ export default async function SearchUsername({
     }
   }
 
-  return <div className="text-2xl">Results for: {user.login}</div>;
+  return (
+    <div className="w-full flex py-6">
+      <div className="text-2xl flex flex-col border-2 pr-3">for:{user.login}</div>
+      <div className="text-2xl flex-1 flex justify-center pl-3">Results for:{user.login} Results for:{user.login} Results for:{user.login}</div>
+    </div>
+  );
 }
