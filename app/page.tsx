@@ -1,7 +1,16 @@
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import Logo from "./../components/Logo";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    redirect("/auth/sign-in");
+  }
+
   return (
     <main className="h-screen w-screen flex flex-col p-6">
       {/* Header */}
@@ -9,7 +18,10 @@ export default function Home() {
         <div>
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
-        <div className="flex gap-6 items-center text-2xl ">
+        {data ? (
+          <div className="text-2xl">Hello, {data.user.email}</div>
+        ) : (
+          <div className="flex gap-6 items-center text-2xl ">
             <Link href="/auth/sign-in" className="cursor-pointer">
               Sign in
             </Link>
@@ -19,7 +31,8 @@ export default function Home() {
             >
               Sign up
             </Link>
-        </div>
+          </div>
+        )}
       </div>
       {/* Content */}
       <div className="h-full flex flex-col gap-6 items-center justify-center">
