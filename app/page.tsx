@@ -10,10 +10,15 @@ export default function Home() {
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
         <div className="flex gap-6 items-center text-2xl ">
-          <div className="cursor-pointer">Sign in</div>
-          <div className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl">
-            Sign up
-          </div>
+            <Link href="/auth/login" className="cursor-pointer">
+              Sign in
+            </Link>
+            <Link
+              href={"/auth/sign-up"}
+              className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
+            >
+              Sign up
+            </Link>
         </div>
       </div>
       {/* Content */}
@@ -32,9 +37,9 @@ export default function Home() {
                   id="Vector"
                   d="M15 15L21 21M10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17Z"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </g>
             </svg>
@@ -61,9 +66,9 @@ export default function Home() {
                 id="Vector"
                 d="M12 11V16M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21ZM12.0498 8V8.1L11.9502 8.1002V8H12.0498Z"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </g>
           </svg>
