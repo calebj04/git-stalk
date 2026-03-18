@@ -22,7 +22,7 @@ export default function SearchBar({
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!search) return;
-    router.push(`/search?q=${encodeURIComponent(search)}`);
+    router.push(`/search?q=${encodeURIComponent(search.trim())}`);
   };
 
   useEffect(() => {
