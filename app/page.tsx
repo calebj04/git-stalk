@@ -10,7 +10,7 @@ export default function Home() {
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
         <div className="flex gap-6 items-center text-2xl ">
-            <Link href="/auth/login" className="cursor-pointer">
+            <Link href="/auth/sign-in" className="cursor-pointer">
               Sign in
             </Link>
             <Link
