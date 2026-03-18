@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
         <div className="w-full flex justify-center text-2xl">
-          <Suspense fallback={<div>Loading search...</div>}>
+          <Suspense fallback={<div className="text-2xl">Loading...</div>}>
             <SearchBar icon={18} text="text-2xl" height={32} width={600} />
           </Suspense>
         </div>
