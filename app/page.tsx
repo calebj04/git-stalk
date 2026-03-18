@@ -48,7 +48,9 @@ export default function Home() {
       <div className="h-full flex flex-col items-center justify-center">
         <div className="flex justify-center w-full relative">
           <p className="text-6xl absolute -top-24">git stalk</p>
-          <SearchBar icon={24} text="text-4xl" height={64} width={800} />
+          <Suspense fallback={<div className="text-2xl">Loading...</div>}>
+            <SearchBar icon={24} text="text-4xl" height={64} width={800} />
+          </Suspense>
         </div>
       </div>
       {/* Footer */}
