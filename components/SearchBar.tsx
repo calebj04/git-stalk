@@ -10,10 +10,15 @@ export default function SearchBar({
   width: number;
 }) {
   return (
-    <form role="search" className={`relative w-full max-w-[${width}px]`}>
+    <form
+      role="search"
+      style={{ maxWidth: width }}
+      className="flex relative w-full p-1"
+    >
       {" "}
       <svg
-        className={`absolute left-4 top-1/2 -translate-y-1/2 w-[${icon}px] h-[${icon}px] text-gray-500`}
+        style={{ width: icon, height: icon, left: icon }}
+        className="absolute top-1/2 -translate-y-1/2 text-gray-500"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -32,7 +37,8 @@ export default function SearchBar({
       <input
         type="search"
         placeholder="search a git username"
-        className={`bg-white text-black pb-1 pl-12 pr-4 rounded-full ${text} w-full h-[${height}px] outline-none focus:ring-2 focus:ring-green-900`}
+        style={{ height: height, paddingLeft: icon * 2 }}
+        className={`bg-white text-black pb-1 pr-4 rounded-full ${text} w-full outline-none focus:ring-2 focus:ring-green-900`}
       />
     </form>
   );

@@ -10,8 +10,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div>
           <Logo className="w-16 h-10 cursor-pointer" />
         </div>
-        <div className="w-full flex justify-center">
-          <SearchBar icon={16} text="text-2xl" height={32} width={600} />
+        <div className="w-full flex justify-center text-2xl">
+          <SearchBar icon={18} text="text-2xl" height={32} width={600} />
         </div>
         <div>Avatar</div>
       </div>
