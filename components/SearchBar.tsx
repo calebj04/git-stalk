@@ -1,16 +1,19 @@
 export default function SearchBar({
-  font,
+  icon,
+  text,
   height,
   width,
 }: {
-  font: number;
+  icon: number;
+  text: string;
   height: number;
   width: number;
 }) {
   return (
     <form role="search" className={`relative w-full max-w-[${width}px]`}>
+      {" "}
       <svg
-        className={`absolute left-4 top-1/2 -translate-y-1/2 w-[${font * (3 / 4)}px] h-[${font * (3 / 4)}px] text-gray-500`}
+        className={`absolute left-4 top-1/2 -translate-y-1/2 w-[${icon}px] h-[${icon}px] text-gray-500`}
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -26,11 +29,10 @@ export default function SearchBar({
           />
         </g>
       </svg>
-
       <input
         type="search"
         placeholder="search a git username"
-        className={`bg-white text-black pb-1 pl-12 pr-4 rounded-full text-[${font}px] w-full h-[${height}px] outline-none focus:ring-2 focus:ring-green-900`}
+        className={`bg-white text-black pb-1 pl-12 pr-4 rounded-full ${text} w-full h-[${height}px] outline-none focus:ring-2 focus:ring-green-900`}
       />
     </form>
   );

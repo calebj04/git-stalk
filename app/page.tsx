@@ -48,7 +48,7 @@ export default function Home() {
       <div className="h-full flex flex-col items-center justify-center">
         <div className="flex justify-center w-full relative">
           <p className="text-6xl absolute -top-24">git stalk</p>
-          <SearchBar font={32} height={64} width={800} />
+          <SearchBar icon={24} text="text-4xl" height={64} width={800} />
         </div>
       </div>
       {/* Footer */}
