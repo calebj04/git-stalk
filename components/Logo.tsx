@@ -1,49 +1,53 @@
+import Link from "next/link";
+
 export default function Logo(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg
-      viewBox="0 0 68 44"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <g clipPath="url(#clip0)">
-        <path
-          d="M65.25 22H55.3333M38.65 22H28.7333M40.3333 22C40.3333 18.3181 43.3181 15.3333 47 15.3333C50.6819 15.3333 53.6667 18.3181 53.6667 22C53.6667 25.6819 50.6819 28.6667 47 28.6667C43.3181 28.6667 40.3333 25.6819 40.3333 22Z"
-          stroke="currentColor"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </g>
-
-      <g clipPath="url(#clip1)">
-        <path
-          d="M39.25 22H29.3333M12.65 22H2.73334M14.3333 22C14.3333 18.3181 17.3181 15.3333 21 15.3333C24.6819 15.3333 27.6667 18.3181 27.6667 22C27.6667 25.6819 24.6819 28.6667 21 28.6667C17.3181 28.6667 14.3333 25.6819 14.3333 22Z"
-          stroke="currentColor"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </g>
-
-      <defs>
-        <clipPath id="clip0">
-          <rect
-            width="40"
-            height="40"
-            fill="white"
-            transform="matrix(-1 0 0 -1 67 42)"
+    <Link href="/">
+      <svg
+        viewBox="0 0 68 44"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+      >
+        <g clipPath="url(#clip0)">
+          <path
+            d="M65.25 22H55.3333M38.65 22H28.7333M40.3333 22C40.3333 18.3181 43.3181 15.3333 47 15.3333C50.6819 15.3333 53.6667 18.3181 53.6667 22C53.6667 25.6819 50.6819 28.6667 47 28.6667C43.3181 28.6667 40.3333 25.6819 40.3333 22Z"
+            stroke="currentColor"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-        </clipPath>
-        <clipPath id="clip1">
-          <rect
-            width="40"
-            height="40"
-            fill="white"
-            transform="matrix(-1 0 0 -1 41 42)"
+        </g>
+
+        <g clipPath="url(#clip1)">
+          <path
+            d="M39.25 22H29.3333M12.65 22H2.73334M14.3333 22C14.3333 18.3181 17.3181 15.3333 21 15.3333C24.6819 15.3333 27.6667 18.3181 27.6667 22C27.6667 25.6819 24.6819 28.6667 21 28.6667C17.3181 28.6667 14.3333 25.6819 14.3333 22Z"
+            stroke="currentColor"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-        </clipPath>
-      </defs>
-    </svg>
+        </g>
+
+        <defs>
+          <clipPath id="clip0">
+            <rect
+              width="40"
+              height="40"
+              fill="white"
+              transform="matrix(-1 0 0 -1 67 42)"
+            />
+          </clipPath>
+          <clipPath id="clip1">
+            <rect
+              width="40"
+              height="40"
+              fill="white"
+              transform="matrix(-1 0 0 -1 41 42)"
+            />
+          </clipPath>
+        </defs>
+      </svg>
+    </Link>
   );
 }
