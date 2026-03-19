@@ -1,16 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/auth/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 export default function Profile() {
   const supabase = createClient();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState("");
-  const [avatar, setAvatar] = useState<File | null>(null);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      const user = userData.user;
+
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("username, avatar_url")
+        .eq("id", user.id)
+        .single();
+
+      if (data) {
+        setAvatarUrl(data.avatar_url);
+        setUsername(data.username);
+      }
+
+      if (error && error.code !== "PGRST116") {
+        console.error(error);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchProfile();
+  }, [supabase]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -19,14 +49,14 @@ export default function Profile() {
     try {
       let avatar_url: string | null = null;
 
-      if (avatar) {
-        const fileExt = avatar.name.split(".").pop();
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split(".").pop();
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const filePath = `avatars/${fileName}`;
 
         const { error: uploadError } = await supabase.storage
           .from("avatars")
-          .upload(filePath, avatar);
+          .upload(filePath, avatarFile);
 
         if (uploadError) throw uploadError;
 
@@ -61,10 +91,14 @@ export default function Profile() {
             htmlFor="avatar-upload"
             className="cursor-pointer group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
           >
-            {avatar ? (
+            {avatarFile ? (
               <img
-                src={URL.createObjectURL(avatar)}
-                alt="Avatar"
+                src={URL.createObjectURL(avatarFile)}
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : avatarUrl ? (
+              <img
+                src={avatarUrl}
                 className="w-full h-full object-cover rounded-full"
               />
             ) : (
@@ -91,7 +125,7 @@ export default function Profile() {
             accept="image/*"
             className="hidden"
             onChange={(e) =>
-              e.target.files ? setAvatar(e.target.files[0]) : null
+              e.target.files ? setAvatarFile(e.target.files[0]) : null
             }
           />
         </div>

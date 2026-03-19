@@ -28,7 +28,12 @@ async function UserDetails() {
       {data && !authError ? (
         <div className="text-2xl">
           {profile ? (
-            `Hello, " ${profile?.username}`
+            <div>
+              Hello,{" "}
+              <Link href={"/profile"} className="font-extrabold">
+                {profile?.username}
+              </Link>
+            </div>
           ) : (
             <div className="flex gap-6 items-center text-2xl ">
               <Link
