@@ -44,9 +44,9 @@ export default async function SearchUsername({
   ];
 
   return (
-    <div className="w-full flex pt-12 mb-6">
-      <div className="flex flex-col gap-6">
-        <div className="text-2xl flex justify-center items-center aspect-square bg-white p-6 rounded-2xl min-w-96">
+    <div className="w-full flex items-center justify-center p-12">
+      <div className="flex md:flex-row flex-col gap-6">
+        <div className="text-2xl flex justify-center items-center bg-white p-6 rounded-2xl">
           <div className="flex flex-col gap-3 items-center">
             <div className="relative w-48 h-48">
               <Link href={user.user.html_url} target="_blank">
@@ -76,20 +76,17 @@ export default async function SearchUsername({
           </div>
         </div>
         <div className="grid grid-cols-2 gap-6">
-            {stats.map((stat, i) => {
-              return (
-                <Link key={i} href={stat.url} target="_blank">
-                  <div className="bg-white aspect-square rounded-xl text-xl text-black flex flex-col items-center justify-center">
-                    <p>{stat.label}:</p>
-                    <p>{stat.value}</p>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-      </div>
-      <div className="text-2xl flex-1 flex justify-center pl-3">
-        Results for:
+          {stats.map((stat, i) => {
+            return (
+              <Link key={i} href={stat.url} target="_blank">
+                <div className="bg-white aspect-square rounded-xl text-xl text-black flex flex-col items-center justify-center">
+                  <p>{stat.label}:</p>
+                  <p>{stat.value}</p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
