@@ -1,7 +1,9 @@
 import { Octokit, type RequestError } from "octokit";
 import { timeAgo } from "@/lib/stats";
 
-const octokit = new Octokit();
+const octokit = new Octokit({
+  auth: process.env.GITHUB_TOKEN,
+});
 
 type GitHubUser = Awaited<
   ReturnType<Octokit["rest"]["users"]["getByUsername"]>
