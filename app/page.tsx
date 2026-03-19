@@ -13,48 +13,48 @@ async function UserDetails() {
     console.error("Auth error:", authError);
   }
 
+  if (!data?.user) {
+    return (
+      <div className="flex gap-6 items-center text-2xl ">
+        <Link href="/auth/sign-in" className="cursor-pointer">
+          Sign in
+        </Link>
+        <Link
+          href={"/auth/sign-up"}
+          className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
+        >
+          Sign up
+        </Link>
+      </div>
+    );
+  }
+
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("username, avatar_url")
-    .eq("id", data.user?.id)
+    .eq("id", data.user.id)
     .maybeSingle();
 
   if (profileError) {
-    console.error("Profile retrival error:", profileError);
+    console.error("Profile retrieval error:", profileError);
   }
 
   return (
-    <div>
-      {data && !authError ? (
-        <div className="text-2xl">
-          {profile ? (
-            <div>
-              Hello,{" "}
-              <Link href={"/profile"} className="font-extrabold">
-                {profile?.username}
-              </Link>
-            </div>
-          ) : (
-            <div className="flex gap-6 items-center text-2xl ">
-              <Link
-                href={"/profile"}
-                className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
-              >
-                Create Profile
-              </Link>
-            </div>
-          )}
+    <div className="text-2xl">
+      {profile ? (
+        <div>
+          Hello,{" "}
+          <Link href={"/profile"} className="font-extrabold">
+            {profile.username}
+          </Link>
         </div>
       ) : (
         <div className="flex gap-6 items-center text-2xl ">
-          <Link href="/auth/sign-in" className="cursor-pointer">
-            Sign in
-          </Link>
           <Link
-            href={"/auth/sign-up"}
+            href={"/profile"}
             className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
           >
-            Sign up
+            Create Profile
           </Link>
         </div>
       )}
