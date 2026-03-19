@@ -67,10 +67,8 @@ export default function Footer() {
       </p>
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* backdrop */}
           <div onClick={closeModal} className="absolute inset-0 bg-black/50" />
 
-          {/* modal content */}
           <div className="relative bg-white text-black rounded-2xl p-6 shadow-xl w-[90%] max-w-md">
             <h2 className="text-xl font-bold mb-2">What is git stalk?</h2>
             <p className="text-sm text-gray-600">

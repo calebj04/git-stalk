@@ -7,16 +7,39 @@ import SearchBar from "@/components/SearchBar";
 
 async function UserDetails() {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
+  const { data, error: authError } = await supabase.auth.getUser();
 
-  if (error) {
-    console.error("Auth error:", error);
+  if (authError) {
+    console.error("Auth error:", authError);
+  }
+
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("username, avatar_url")
+    .eq("id", data.user?.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Profile retrival error:", profileError);
   }
 
   return (
     <div>
-      {data && !error ? (
-        <div className="text-2xl">Hello, {data.user.email}</div>
+      {data && !authError ? (
+        <div className="text-2xl">
+          {profile ? (
+            `Hello, " ${profile?.username}`
+          ) : (
+            <div className="flex gap-6 items-center text-2xl ">
+              <Link
+                href={"/profile"}
+                className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
+              >
+                Create Profile
+              </Link>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="flex gap-6 items-center text-2xl ">
           <Link href="/auth/sign-in" className="cursor-pointer">
