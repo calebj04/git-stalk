@@ -1,44 +1,121 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/components/auth/ui/button";
+import { createClient } from "@/lib/supabase/client";
 
 export default function Profile() {
+  const supabase = createClient();
+
+  const [username, setUsername] = useState("");
+  const [avatar, setAvatar] = useState<File | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      let avatar_url: string | null = null;
+
+      if (avatar) {
+        const fileExt = avatar.name.split(".").pop();
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `avatars/${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, avatar);
+
+        if (uploadError) throw uploadError;
+
+        const { data } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
+        avatar_url = data.publicUrl;
+      }
+
+      const { data: userData, error: profileError } = await supabase
+        .from("profiles")
+        .upsert({
+          id: (await supabase.auth.getUser()).data.user?.id,
+          username,
+          avatar_url,
+        });
+
+      if (profileError) throw profileError;
+      console.log("Profile saved:", userData);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="w-full flex items-center justify-center p-12">
       <div className="bg-white rounded-xl w-full max-w-sm h-96 p-7 flex flex-col items-center justify-between">
         <div className="flex flex-col items-center mt-6">
-          <button
-            type="button"
-            className="group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
+          <label
+            htmlFor="avatar-upload"
+            className="cursor-pointer group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
           >
-            <svg
-              width="800px"
-              height="800px"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M13.6471 16.375L12.0958 14.9623C11.3351 14.2694 10.9547 13.923 10.5236 13.7918C10.1439 13.6762 9.73844 13.6762 9.35878 13.7918C8.92768 13.923 8.5473 14.2694 7.78652 14.9623L4.92039 17.5575M13.6471 16.375L13.963 16.0873C14.7238 15.3944 15.1042 15.048 15.5352 14.9168C15.9149 14.8012 16.3204 14.8012 16.7 14.9168C17.1311 15.048 17.5115 15.3944 18.2723 16.0873L19.4237 17.0896M13.6471 16.375L17.0469 19.4528M17 9C17 10.1046 16.1046 11 15 11C13.8954 11 13 10.1046 13 9C13 7.89543 13.8954 7 15 7C16.1046 7 17 7.89543 17 9ZM21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                stroke="#16a349"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {avatar ? (
+              <img
+                src={URL.createObjectURL(avatar)}
+                alt="Avatar"
+                className="w-full h-full object-cover rounded-full"
               />
-            </svg>
-          </button>
+            ) : (
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12 5v14M5 12h14"
+                  stroke="#16a349"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </label>
+          <input
+            id="avatar-upload"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) =>
+              e.target.files ? setAvatar(e.target.files[0]) : null
+            }
+          />
         </div>
 
         <div className="cursor-text group mb-5">
           <input
             placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="bg-white text-black focus:outline-none text-center h-full text-2xl"
           ></input>
           <div className="bg-gray-200 h-1 rounded-full group-hover:bg-gray-300 transition"></div>
         </div>
 
         <div className="w-full">
-          <Button type="submit" className="w-full">
-            Save Profile
+          <Button
+            className="w-full"
+            type="button"
+            onClick={handleSave}
+            disabled={isSaving}
+          >
+            {isSaving ? "Saving..." : "Save Profile"}
           </Button>
+          {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
         </div>
       </div>
     </div>
