@@ -1,9 +1,26 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Footer() {
+  const [open, setOpen] = useState(false);
+
+  function openModal() {
+    setOpen(true);
+  }
+
+  function closeModal() {
+    setOpen(false);
+  }
   return (
-    <div className="h-10 flex justify-center w-full relative">
-      <div className="absolute left-0 top-1/2 -translate-y-1/2">
+    <div className="h-10 flex justify-center items-center w-full relative">
+      <div
+        onClick={() => {
+          openModal();
+        }}
+        className="absolute left-0 top-1/2 -translate-y-1/2"
+      >
         <svg
           className="w-6 h-6 text-white cursor-pointer"
           viewBox="0 0 24 24"
@@ -22,7 +39,7 @@ export default function Footer() {
           </g>
         </svg>
       </div>
-      <p>
+      <p className="text-sm">
         Built with{" "}
         <Link
           href="https://nextjs.org"
@@ -48,6 +65,30 @@ export default function Footer() {
           Supabase
         </Link>{" "}
       </p>
+      {open && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* backdrop */}
+          <div onClick={closeModal} className="absolute inset-0 bg-black/50" />
+
+          {/* modal content */}
+          <div className="relative bg-white text-black rounded-2xl p-6 shadow-xl w-[90%] max-w-md">
+            <h2 className="text-xl font-bold mb-2">What is git stalk?</h2>
+            <p className="text-sm text-gray-600">
+              git stalk is a website designed to improve your stalking effecieny
+              (of GitHub users, of course). Currently, you can stalk basic
+              information from users such as recent activity and repos, but stay
+              tuned for more updates!
+            </p>
+
+            <button
+              onClick={closeModal}
+              className="mt-4 px-4 py-2 bg-black text-white rounded-lg"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

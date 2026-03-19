@@ -45,7 +45,7 @@ export default async function SearchUsername({
 
   return (
     <div className="w-full flex items-center justify-center p-12">
-      <div className="flex md:flex-row flex-col gap-6">
+      <div className="flex lg:flex-row flex-col gap-6">
         <div className="text-2xl flex justify-center items-center bg-white p-6 rounded-2xl">
           <div className="flex flex-col gap-3 items-center">
             <div className="relative w-48 h-48">
