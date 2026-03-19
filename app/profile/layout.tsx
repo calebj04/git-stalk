@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div>Avatar</div>
       </div>
       {/* Content */}
-      <div className="h-full flex flex-1">
+      <div className="h-full flex flex-1 justify-center items-center">
         <Suspense fallback={<div className="text-2xl">Loading...</div>}>
           {children}
         </Suspense>
