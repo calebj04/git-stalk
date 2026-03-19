@@ -24,8 +24,9 @@ export default async function SearchUsername({
 
   return (
     <div className="w-full flex pt-12">
-      <div className="text-2xl flex flex-col pr-3">
-        <div className="flex pb-2 border-b-2">
+      <div>
+      <div className="text-2xl flex flex-col bg-white p-3 rounded-2xl">
+        <div className="flex pb-2">
           <div className="relative w-24 h-24">
             <Link href={user.html_url} target="_blank">
               <Image
@@ -36,17 +37,19 @@ export default async function SearchUsername({
               />
             </Link>
           </div>
-          <div className="flex flex-col justify-center">
-            <div className="text-4xl">
+          <div className="ml-2 flex flex-col justify-center">
+            <div className="text-4xl text-black">
               <Link href={user.html_url} target="_blank">
                 {user.name || user.login}
               </Link>
             </div>
             <Link href={lastActive?.url || ""} target="_blank">
-              <div className="text-sm">Active {lastActive?.time}</div>
+              <div className="text-sm text-gray-500">Active {lastActive?.time}</div>
             </Link>
           </div>
         </div>
+        <div className="bg-gray-500 w-full h-0.5 rounded-full"></div>
+      </div>
       </div>
       <div className="text-2xl flex-1 flex justify-center pl-3">
         Results for:
