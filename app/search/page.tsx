@@ -1,5 +1,4 @@
 import { getGitHubUser, getLastActiveCommit } from "@/lib/gitAPI";
-import { timeAgo } from "@/lib/stats";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -21,9 +20,7 @@ export default async function SearchUsername({
     }
   }
 
-  let lastActive;
-  lastActive = await getLastActiveCommit(user.login);
-  lastActive = lastActive ? timeAgo(lastActive) : "No recent activity";
+  const lastActive = await getLastActiveCommit(user.login);
 
   return (
     <div className="w-full flex pt-12">
@@ -45,7 +42,9 @@ export default async function SearchUsername({
                 {user.name || user.login}
               </Link>
             </div>
-            <div className="text-sm">Active {lastActive}</div>
+            <Link href={lastActive?.url || ""} target="_blank">
+              <div className="text-sm">Active {lastActive?.time}</div>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Octokit, type RequestError } from "octokit";
+import { timeAgo } from "@/lib/stats";
 
 const octokit = new Octokit();
 
@@ -9,6 +10,11 @@ type GitHubUser = Awaited<
 type UserEvents = Awaited<
   ReturnType<Octokit["rest"]["activity"]["listPublicEventsForUser"]>
 >["data"];
+
+type LastActiveCommit = {
+  time: string;
+  url: string | null;
+} | null;
 
 export async function getGitHubUser(username: string): Promise<GitHubUser> {
   try {
@@ -33,7 +39,7 @@ export async function getGitHubUser(username: string): Promise<GitHubUser> {
 
 export async function getLastActiveCommit(
   username: string,
-): Promise<string | null> {
+): Promise<LastActiveCommit> {
   try {
     const res = await octokit.request("GET /users/{username}/events/public", {
       username,
@@ -48,7 +54,14 @@ export async function getLastActiveCommit(
     // Find first PushEvent (contains commits)
     const pushEvent = events.find((event) => event.type === "PushEvent");
 
-    return pushEvent?.created_at ?? null;
+    const lastActive = pushEvent?.created_at
+      ? timeAgo(pushEvent?.created_at)
+      : "No recent activity";
+
+    return {
+      time: lastActive,
+      url: pushEvent?.repo.url ?? null,
+    };
   } catch (err) {
     const error = err as RequestError;
 
