@@ -45,10 +45,10 @@ export default async function SearchUsername({
 
   return (
     <div className="w-full flex pt-12 mb-6">
-      <div>
-        <div className="text-2xl flex flex-col bg-white p-6 rounded-2xl min-w-96">
-          <div className="flex pb-2">
-            <div className="relative w-24 h-24">
+      <div className="flex flex-col gap-6">
+        <div className="text-2xl flex justify-center items-center aspect-square bg-white p-6 rounded-2xl min-w-96">
+          <div className="flex flex-col gap-3 items-center">
+            <div className="relative w-48 h-48">
               <Link href={user.user.html_url} target="_blank">
                 <Image
                   src={user.user.avatar_url}
@@ -58,8 +58,8 @@ export default async function SearchUsername({
                 />
               </Link>
             </div>
-            <div className="ml-2 flex flex-col justify-center">
-              <div className="text-4xl text-black">
+            <div className="flex flex-col justify-center items-center">
+              <div className="text-5xl text-black">
                 <Link href={user.user.html_url} target="_blank">
                   {user.user.name || user.user.login}
                 </Link>
@@ -74,12 +74,12 @@ export default async function SearchUsername({
               </Link>
             </div>
           </div>
-          <div className="bg-gray-500 w-full h-0.5 mb-3 rounded-full"></div>
-          <div className="grid grid-cols-2 gap-3">
+        </div>
+        <div className="grid grid-cols-2 gap-6">
             {stats.map((stat, i) => {
               return (
                 <Link key={i} href={stat.url} target="_blank">
-                  <div className="bg-gray-50 aspect-square rounded-xl text-black flex flex-col items-center justify-center">
+                  <div className="bg-white aspect-square rounded-xl text-xl text-black flex flex-col items-center justify-center">
                     <p>{stat.label}:</p>
                     <p>{stat.value}</p>
                   </div>
@@ -87,7 +87,6 @@ export default async function SearchUsername({
               );
             })}
           </div>
-        </div>
       </div>
       <div className="text-2xl flex-1 flex justify-center pl-3">
         Results for:
