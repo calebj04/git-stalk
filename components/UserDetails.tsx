@@ -29,26 +29,30 @@ export async function UserDetails() {
   }
 
   return (
-    <div className="relative w-10 h-10 text-2xl">
+    <div>
       {profile ? (
-        <div>
-          <Link href={"/profile"} className="font-extrabold">
-            <Image
-              className="w-full h-full rounded-full"
-              src={profile.avatar_url}
-              alt="User avatar image"
-              fill
-            />
-          </Link>
+        <div className="relative w-10 h-10 text-2xl">
+          <div>
+            <Link href={"/profile"} className="font-extrabold">
+              <Image
+                className="w-full h-full rounded-full"
+                src={profile.avatar_url}
+                alt="User avatar image"
+                fill
+              />
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="flex gap-6 items-center text-2xl ">
-          <Link
-            href={"/profile"}
-            className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
-          >
-            Create Profile
-          </Link>
+        <div className="text-2xl">
+          <div className="flex gap-6 items-center text-2xl ">
+            <Link
+              href={"/profile"}
+              className="cursor-pointer bg-green-900 py-1 px-2 rounded-xl"
+            >
+              Create Profile
+            </Link>
+          </div>
         </div>
       )}
     </div>
