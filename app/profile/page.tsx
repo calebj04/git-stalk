@@ -83,6 +83,14 @@ export default function Profile() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center p-12">
+        <div className="text-2xl">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex items-center justify-center p-12">
       <div className="bg-white rounded-xl w-full max-w-sm h-96 p-7 flex flex-col items-center justify-between">
