@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
 export async function UserDetails() {
@@ -28,11 +29,16 @@ export async function UserDetails() {
   }
 
   return (
-    <div className="text-2xl">
+    <div className="relative w-10 h-10 text-2xl">
       {profile ? (
         <div>
           <Link href={"/profile"} className="font-extrabold">
-            <img className="w-10 rounded-full" src={profile.avatar_url} />
+            <Image
+              className="w-full h-full rounded-full"
+              src={profile.avatar_url}
+              alt="User avatar image"
+              fill
+            />
           </Link>
         </div>
       ) : (

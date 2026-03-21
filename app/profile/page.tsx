@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/auth/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import Image from "next/image";
 
 export default function Profile() {
   const supabase = createClient();
@@ -97,17 +98,21 @@ export default function Profile() {
         <div className="flex flex-col items-center mt-6">
           <label
             htmlFor="avatar-upload"
-            className="cursor-pointer group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
+            className="relative cursor-pointer group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
           >
             {avatarFile ? (
-              <img
+              <Image
                 src={URL.createObjectURL(avatarFile)}
                 className="w-full h-full object-cover rounded-full"
+                alt="User avatar image"
+                fill
               />
             ) : avatarUrl ? (
-              <img
+              <Image
                 src={avatarUrl}
                 className="w-full h-full object-cover rounded-full"
+                alt="User avatar image"
+                fill
               />
             ) : (
               <svg
