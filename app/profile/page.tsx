@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/auth/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { refreshUserProfile } from "@/app/actions";
 import Image from "next/image";
 
 export default function Profile() {
@@ -11,7 +12,7 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); // This stores the "active" image (DB or Preview)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -42,7 +43,7 @@ export default function Profile() {
     const file = e.target.files?.[0];
     if (file) {
       setAvatarFile(file);
-      setAvatarUrl(URL.createObjectURL(file)); // Create local preview
+      setAvatarUrl(URL.createObjectURL(file));
     }
   };
 
@@ -56,7 +57,7 @@ export default function Profile() {
       } = await supabase.auth.getUser();
       if (!user) throw new Error("No user found");
 
-      let finalAvatarUrl = avatarUrl; // Default to current URL (prevents overwriting with null)
+      let finalAvatarUrl = avatarUrl;
 
       if (avatarFile) {
         const filePath = `avatars/${user.id}-${Math.random()}.${avatarFile.name.split(".").pop()}`;
@@ -79,6 +80,8 @@ export default function Profile() {
       });
 
       if (profileError) throw profileError;
+
+      await refreshUserProfile();
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
