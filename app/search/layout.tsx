@@ -18,7 +18,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Suspense>
         </div>
         <div>
-          <UserDetails />
+          <Suspense fallback={<div className="text-2xl">Loading...</div>}>
+            <UserDetails />
+          </Suspense>
         </div>
       </div>
       {/* Content */}
