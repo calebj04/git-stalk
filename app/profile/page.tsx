@@ -11,50 +11,55 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); // This stores the "active" image (DB or Preview)
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      const user = userData.user;
-
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("profiles")
         .select("username, avatar_url")
         .eq("id", user.id)
         .single();
 
       if (data) {
+        setUsername(data.username || "");
         setAvatarUrl(data.avatar_url);
-        setUsername(data.username);
       }
-
-      if (error && error.code !== "PGRST116") {
-        console.error(error);
-      }
-
       setIsLoading(false);
     };
 
     fetchProfile();
   }, [supabase]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      setAvatarUrl(URL.createObjectURL(file)); // Create local preview
+    }
+  };
+
   const handleSave = async () => {
     setIsSaving(true);
     setError(null);
 
     try {
-      let avatar_url: string | null = null;
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      let finalAvatarUrl = avatarUrl; // Default to current URL (prevents overwriting with null)
 
       if (avatarFile) {
-        const fileExt = avatarFile.name.split(".").pop();
-        const fileName = `${crypto.randomUUID()}.${fileExt}`;
-        const filePath = `avatars/${fileName}`;
-
+        const filePath = `avatars/${user.id}-${Math.random()}.${avatarFile.name.split(".").pop()}`;
         const { error: uploadError } = await supabase.storage
           .from("avatars")
           .upload(filePath, avatarFile);
@@ -64,33 +69,29 @@ export default function Profile() {
         const { data } = supabase.storage
           .from("avatars")
           .getPublicUrl(filePath);
-        avatar_url = data.publicUrl;
+        finalAvatarUrl = data.publicUrl;
       }
 
-      const { data: userData, error: profileError } = await supabase
-        .from("profiles")
-        .upsert({
-          id: (await supabase.auth.getUser()).data.user?.id,
-          username,
-          avatar_url,
-        });
+      const { error: profileError } = await supabase.from("profiles").upsert({
+        id: user.id,
+        username,
+        avatar_url: finalAvatarUrl,
+      });
 
       if (profileError) throw profileError;
-      console.log("Profile saved:", userData);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Unknown error");
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     } finally {
       setIsSaving(false);
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="w-full flex items-center justify-center p-12">
-        <div className="text-2xl">Loading...</div>
-      </div>
-    );
-  }
+  if (isLoading)
+    return <div className="p-12 text-center text-2xl">Loading...</div>;
 
   return (
     <div className="w-full flex items-center justify-center p-12">
@@ -98,21 +99,14 @@ export default function Profile() {
         <div className="flex flex-col items-center mt-6">
           <label
             htmlFor="avatar-upload"
-            className="relative cursor-pointer group w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition"
+            className="relative cursor-pointer group w-32 h-32 rounded-full bg-gray-200 overflow-hidden flex items-center justify-center hover:bg-gray-300 transition"
           >
-            {avatarFile ? (
-              <Image
-                src={URL.createObjectURL(avatarFile)}
-                className="w-full h-full object-cover rounded-full"
-                alt="User avatar image"
-                fill
-              />
-            ) : avatarUrl ? (
+            {avatarUrl ? (
               <Image
                 src={avatarUrl}
-                className="w-full h-full object-cover rounded-full"
-                alt="User avatar image"
+                alt="Avatar"
                 fill
+                className="object-cover"
               />
             ) : (
               <svg
@@ -137,32 +131,27 @@ export default function Profile() {
             type="file"
             accept="image/*"
             className="hidden"
-            onChange={(e) =>
-              e.target.files ? setAvatarFile(e.target.files[0]) : null
-            }
+            onChange={handleFileChange}
           />
         </div>
 
-        <div className="cursor-text group mb-5">
+        <div className="group mb-5 w-full">
           <input
-            placeholder="username"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="bg-white text-black focus:outline-none text-center h-full text-2xl"
-          ></input>
-          <div className="bg-gray-200 h-1 rounded-full group-hover:bg-gray-300 transition"></div>
+            className="w-full bg-white text-black focus:outline-none text-center text-2xl"
+          />
+          <div className="bg-gray-200 h-1 rounded-full group-hover:bg-gray-300 transition" />
         </div>
 
         <div className="w-full">
-          <Button
-            className="w-full"
-            type="button"
-            onClick={handleSave}
-            disabled={isSaving}
-          >
+          <Button className="w-full" onClick={handleSave} disabled={isSaving}>
             {isSaving ? "Saving..." : "Save Profile"}
           </Button>
-          {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+          {error && (
+            <p className="text-red-500 mt-2 text-sm text-center">{error}</p>
+          )}
         </div>
       </div>
     </div>
